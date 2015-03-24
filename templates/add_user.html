@@ -1,18 +1,23 @@
 {% extends "layout.html" %}
 {% block body %}
-{% if error %}<p class="error"><strong>Error:</strong> {{ error }}</p>{% endif %}
+    {% if error %}<p class="error"><strong>Error:</strong> {{ error }}</p>
+    {% endif %}
 
-<div class="add_user">
-  <form action="{{ url_for('add_user') }}" method="post" class="add-entry" enctype="multipart/form-data">
-    <dl>
-      <dt>Name:</dt>
-      <dd><input class="form_input" type="text" size="30" name="name" /></dd>
-      <dt>Mail:</dt>
-      <dd><input class="form_input" type="text" size="30" name="mail" /></dd>
-      <dt>Select Image:</dt>
-      <dd><input class="form_file" type="file" name="image" /></dd>
-      <dd><input class="form_submit" type="submit" value="Submit New Userdata" /></dd>
-    </dl>
-  </form>
-</div>
+    <div class="add_user">
+        <form action="{{ url_for('add_user') }}" method="post" class="add-entry"
+              enctype="multipart/form-data">
+            <dl>
+                <dt>Name:</dt>
+                <dd><input class="form_input" type="text" size="30"
+                           name="name"/></dd>
+                <dt>Mail:</dt>
+                <dd><input class="form_input" type="text" size="30"
+                           name="mail"/></dd>
+                <dt>Select Image:</dt>
+                <dd><input class="form_file" type="file" name="image"/></dd>
+                <dd><input class="form_submit" type="submit"
+                           value="Submit New Userdata"/></dd>
+            </dl>
+        </form>
+    </div>
 {% endblock %}
