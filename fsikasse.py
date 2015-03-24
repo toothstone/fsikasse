@@ -33,7 +33,7 @@ app.config.update(dict(
     ALLOWED_EXTENSIONS=set(['png', 'jpg', 'jpeg', 'gif']),
     PROFILE_IMAGE_SIZE=(150, 200),
     STORAGE_ACCOUNT=(4, 'Lager/Kühlschrank'),
-    CASH_IN_ACCOUNT=(1, 'FSI: Graue Kasse'),
+    CASH_IN_ACCOUNT=(1, 'Graue Kasse'),
     MONEY_VALUABLE_ID=1,
     SECRET_KEY='development key',
 ))
