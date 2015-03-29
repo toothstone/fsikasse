@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import division
 
 import sys
 
@@ -232,7 +233,7 @@ def edit_userprofile(username):
                 left = int(im.size[0]/2 - new_width/2)
                 im = im.crop((left, 0, left + new_width, im.size[1]))
                 flash(u'Image had to be cropped to 3:4 ratio, sorry!')
-	    elif float(im.size[0]) / float(im.size[1]) < 3.0/4.0: # crop height
+            elif float(im.size[0]) / float(im.size[1]) < 3.0/4.0: # crop height
                 new_height = int(im.size[1] * ( ( float(im.size[0]) * 4.0 )/ ( float(im.size[1]) * 3.0 ) ) )
                 top = int(im.size[1]/2 - new_height/2)
                 im = im.crop((0, top, im.size[0], top + new_height))
@@ -394,6 +395,16 @@ def cancle_transaction(username, transaction_id):
     flash('Buchung wurde storniert.')
     return redirect(url_for('edit_userprofile', username=username))
 
+@app.route('/statistics')
+def show_statistics():
+    db = get_db()
+    cur = db.cursor()
+    cur.execute('''SELECT balance FROM account_valuable_balance
+                WHERE account_id = (?)''',
+                [app.config['CASH_IN_ACCOUNT'][0]])
+    cash_in_balance = cur.fetchone()[0] / 100
+    return render_template('statistics.html', title='Statistiken',
+                           cash_in_balance=cash_in_balance)
 if __name__ == '__main__':
     app.debug = True
     app.run()

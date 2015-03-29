@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div class="side">
+    <b>Graue Kasse:
+        <span class="balance"
+            {% if cash_in_balance < 0.0 %}style="color: red;"
+                {% else %}style="color: green;" {% endif %}>
+            {{ '%.2f' % cash_in_balance }} €
+        </span>
+    </b>
+</div>
+
+{% endblock %}
