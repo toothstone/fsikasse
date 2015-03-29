@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import division
 
 import sys
 
@@ -476,7 +477,16 @@ def cancle_transaction(username, transaction_id):
     flash('Buchung wurde storniert.')
     return redirect(url_for('edit_userprofile', username=username))
 
-
+@app.route('/statistics')
+def show_statistics():
+    db = get_db()
+    cur = db.cursor()
+    cur.execute('''SELECT balance FROM account_valuable_balance
+                WHERE account_id = (?)''',
+                [app.config['CASH_IN_ACCOUNT'][0]])
+    cash_in_balance = cur.fetchone()[0] / 100
+    return render_template('statistics.html', title='Statistiken',
+                           cash_in_balance=cash_in_balance)
 if __name__ == '__main__':
     app.debug = True
     app.run()
