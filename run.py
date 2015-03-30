@@ -34,7 +34,7 @@ app.config.update(dict(
     ALLOWED_EXTENSIONS=set(['png', 'jpg', 'jpeg', 'gif']),
     PROFILE_IMAGE_SIZE=(150, 200),
     STORAGE_ACCOUNT=(4, 'Lager/Kühlschrank'),
-    CASH_IN_ACCOUNT=(1, 'Graue Kasse'),
+    CASH_IN_ACCOUNT=(1, 'Getränkekasse'),
     MONEY_VALUABLE_ID=1,
     SECRET_KEY='development key',
 ))
@@ -181,7 +181,7 @@ def action_buy(username, valuablename):
     db.commit()
 
     if user['direct_payment']:
-        flash('Bitte {:.2f} € in die graue Kasse legen.'.format(
+        flash('Bitte {:.2f} € in das Sparschwein legen.'.format(
             valuable['price'] / 100.0))
     else:
         flash('Einkauf war erfolgreich :)')
@@ -219,8 +219,7 @@ def transfer_money(username):
     db.commit()
 
     flash('Geld wurde überwiesen.')
-    return redirect(url_for('show_index'), title="Benutzerübersicht")
-
+    return redirect(url_for('show_index') )
 
 @app.route('/user/<username>/profile', methods=['POST', 'GET'])
 def edit_userprofile(username):
@@ -389,8 +388,9 @@ def add_to_account(username):
         flash(u'Keine Transaktion durchgeführt.')
         return redirect(url_for('show_index'))
 
-    cur.execute('INSERT INTO `transaction` (datetime) VALUES (?)',
-                [datetime.now()])
+    cur.execute('INSERT INTO `transaction` (datetime, comment) VALUES (?, ?)',
+                [datetime.now(), 'Einzahlung ' + username])
+
     transaction_id = cur.lastrowid
     cur.execute(
         'INSERT INTO transfer (from_id, to_id, valuable_id, amount, transaction_id) ' +
@@ -426,8 +426,9 @@ def sub_from_account(username):
         flash(u'Keine Transaktion durchgeführt.')
         return redirect(url_for('show_index'))
 
-    cur.execute('INSERT INTO `transaction` (datetime) VALUES (?)',
-                [datetime.now()])
+    cur.execute('INSERT INTO `transaction` (datetime, comment) VALUES (?, ?)',
+                [datetime.now(), 'Auszahlung ' + username])
+
     transaction_id = cur.lastrowid
     cur.execute(
         'INSERT INTO transfer (from_id, to_id, valuable_id, amount, transaction_id)' +
@@ -477,6 +478,36 @@ def cancle_transaction(username, transaction_id):
     flash('Buchung wurde storniert.')
     return redirect(url_for('edit_userprofile', username=username))
 
+@app.route('/storage')
+def storage():
+
+    return render_template('storage.html', title='Lagerbestand')
+
+@app.route('/storage/sub', methods=['POST'])
+def sub_from_storage():
+    db = get_db()
+    cur = db.cursor()
+    amount = int(float(request.form['amount'])*100)
+    comment = request.form['comment']
+
+    if amount <= 0.0:
+        flash(u'Kein sinnvoller Rechnungsbetrag.')
+        return redirect(url_for('show_index'))
+
+    cur.execute('INSERT INTO `transaction` (datetime, comment) VALUES (?, ?)',
+                [datetime.now(), comment])
+    transaction_id = cur.lastrowid
+    cur.execute(
+        'INSERT INTO transfer (from_id, to_id, valuable_id, amount, transaction_id) ' +
+            'VALUES  (?, ?, ?, ?, ?)',
+        [app.config['CASH_IN_ACCOUNT'][0], None, app.config['MONEY_VALUABLE_ID'],
+            amount, transaction_id])
+    db.commit()
+    flash(u'Einkauf wurde abgezogen.')
+
+    return redirect(url_for('show_index'))
+
+
 @app.route('/statistics')
 def show_statistics():
     db = get_db()
@@ -485,8 +516,24 @@ def show_statistics():
                 WHERE account_id = (?)''',
                 [app.config['CASH_IN_ACCOUNT'][0]])
     cash_in_balance = cur.fetchone()[0] / 100
+
+    cur = db.execute(
+        '''SELECT `transaction`.rowid, comment, datetime,
+          account_from.name AS from_name, from_id, account_to.name AS to_name,
+          to_id, amount, valuable.unit_name, valuable.name AS valuable_name,
+          valuable_id FROM `transaction`
+          JOIN transfer ON `transaction`.rowid = transfer.transaction_id
+          JOIN `valuable` ON transfer.valuable_id = valuable.rowid
+          LEFT JOIN account AS account_from ON from_id = account_from.rowid
+          LEFT JOIN account AS account_to ON to_id = account_to.rowid
+          WHERE from_id = ? OR to_id = ?
+          ORDER BY strftime("%s", datetime) DESC''',
+            [app.config['CASH_IN_ACCOUNT'][0],app.config['CASH_IN_ACCOUNT'][0]])
+    transactions = cur.fetchall()
     return render_template('statistics.html', title='Statistiken',
-                           cash_in_balance=cash_in_balance)
+                           cash_in_balance=cash_in_balance,
+                           transactions=transactions)
+
 if __name__ == '__main__':
     app.debug = True
     app.run()

@@ -53,7 +53,7 @@ CREATE VIEW IF NOT EXISTS `account_valuable_balance` AS
     valuable.unit_name AS unit_name
   FROM account, valuable;
 
-INSERT INTO `account` (`rowid`, `name`) VALUES (1, 'Graue Kasse');
+INSERT INTO `account` (`rowid`, `name`) VALUES (1, 'Getränkekasse');
 INSERT INTO `account` (`rowid`, `name`) VALUES (4, 'Lager/Kühlschrank');
 INSERT INTO `account` (`rowid`, `name`) VALUES (5, 'Gäste');
 
@@ -61,7 +61,7 @@ INSERT INTO `user` (`name`, `account_id`, `browsable`, `direct_payment`, `allow_
 VALUES ("Gäste", 5, 0, 1, 0);
 
 
-INSERT INTO `unit` (`name`, `symbol`) VALUES ('Cent', '¢');
+INSERT INTO `unit` (`name`, `symbol`) VALUES ('Cent', 'ct');
 INSERT INTO `unit` (`name`, `symbol`) VALUES ('Flasche', 'Fl.');
 INSERT INTO `unit` (`name`, `symbol`) VALUES ('Stück', 'St.');
 

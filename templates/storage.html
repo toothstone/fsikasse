@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+
+<div class="side">
+  <ul>
+    <li>Rechnungsbetrag und -beschreibung eintragen:
+      <form action="
+      {{ url_for('sub_from_storage') }}" method="post">
+        <input type="number" class="input_number" min="0" max="500"
+               step="0.01" size="10" name="amount" value="0.00" />
+        <input type="string" class="input_string"
+               name="comment" value="Was, wo, warum?" />
+
+        <input type="submit" value="Eintragen" />
+      </form>
+    </li>
+  </ul>
+</div>
+
+{% endblock %}
