@@ -68,7 +68,7 @@ INSERT INTO `unit` (`name`, `symbol`) VALUES ('Stück', 'St.');
 INSERT INTO `valuable` (`name`, `unit_name`, `price`, `image_path`, `product`)
 VALUES ('Euro', 'Cent', 1, NULL, 0);
 INSERT INTO `valuable` (`name`, `unit_name`, `price`, `image_path`)
-VALUES ('$GETRÄNK', 'Flasche', 100, 'products/Bier.png');
+VALUES ('$GETRÄNK', 'Flasche', 100, 'products/placeholder.png');
 
 COMMIT;
 
