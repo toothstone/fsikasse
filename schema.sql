@@ -56,10 +56,18 @@ CREATE VIEW IF NOT EXISTS `account_valuable_balance` AS
 INSERT INTO `account` (`rowid`, `name`) VALUES (1, 'Getränkekasse');
 INSERT INTO `account` (`rowid`, `name`) VALUES (4, 'Lager/Kühlschrank');
 INSERT INTO `account` (`rowid`, `name`) VALUES (5, 'Gäste');
+INSERT INTO `account` (`rowid`, `name`) VALUES (6, 'BTC');
+INSERT INTO `account` (`rowid`, `name`) VALUES (7, 'Doge');
 
-INSERT INTO `user` (`name`, `account_id`, `browsable`, `direct_payment`, `allow_edit_profile`)
-VALUES ("Gäste", 5, 0, 1, 0);
-
+INSERT INTO `user` (`name`, `account_id`, `browsable`, `direct_payment`,
+                    `allow_edit_profile`, image_path)
+VALUES ("Gäste", 5, 0, 1, 0, "");
+INSERT INTO `user` (`name`, `account_id`, `browsable`, `direct_payment`,
+                    `allow_edit_profile`, image_path)
+VALUES("BTC", 6, 1, 0, 0, "users/btc_logo.png");
+INSERT INTO `user` (`name`, `account_id`, `browsable`, `direct_payment`,
+                    `allow_edit_profile`, image_path)
+VALUES("Doge", 7, 1, 0, 0, "users/doge_logo.png");
 
 INSERT INTO `unit` (`name`, `symbol`) VALUES ('Cent', 'ct');
 INSERT INTO `unit` (`name`, `symbol`) VALUES ('Flasche', 'Fl.');
