@@ -60,5 +60,9 @@
 <div class="bottom-big">
     <a href="{{ url_for('show_userpage', admin=admin_panel, username='Gäste') }}">
         <div class="guest-account"><i class="fa fa-users"></i> Gäste</div></a>
+    <b>Bitcoin-Adresse:</b>
+    {{ btc_address }}<br>
+    <b>Dogecoin-Adresse:</b>
+    {{ doge_address }}
 </div>
 {% endblock %}

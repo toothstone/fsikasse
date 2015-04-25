@@ -37,6 +37,8 @@ app.config.update(dict(
     CASH_IN_ACCOUNT=(1, 'Getränkekasse'),
     MONEY_VALUABLE_ID=1,
     SECRET_KEY='development key',
+    BTC_ADDRESS='14c72Gq6bxXzKUhv1VEVfD5Vw5gHgBZGNY',
+    DOGE_ADDRESS='DDwb2121xQrMoNhrSAyaBdBzV6rZhq8Guq',
 ))
 
 
@@ -99,7 +101,9 @@ def show_index():
         [app.config['MONEY_VALUABLE_ID']])
     users = db.fetchall()
 
-    return render_template('start.html', title="Benutzerübersicht", users=users)
+    return render_template('start.html', title="Benutzerübersicht",
+                           users=users, btc_address=app.config['BTC_ADDRESS'],
+                           doge_address=app.config['DOGE_ADDRESS'])
 
 
 @app.route('/admin', methods=['GET'])

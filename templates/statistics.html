@@ -15,6 +15,7 @@
 <div class="products">
 <h2>Transaktionsverlauf:</h2>
 <table class="history">
+  {% if transactions %}
   <tr>
     <td>Datum</td>
     <td>Ware</td>
@@ -34,11 +35,12 @@
     <td>{{ t.to_name }}</td>
     <td>{{ t.comment }}</td>
   </tr>
+  {% endfor %}
   {% else %}
   <tr>
     <td><em>Unbelievable. No transactions here so far.</em></td>
   </tr>
-  {% endfor %}
+  {% endif %}
 </table>
 </div>
 {% endblock %}
