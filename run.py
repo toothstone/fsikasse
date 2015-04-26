@@ -30,7 +30,7 @@ EMAIL_REGEX = re.compile(r"[^@]+@[^@]+\.[^@]+")
 
 app.config.update(dict(
     DATABASE=os.path.join(app.root_path, 'kasse.db'),
-    UPLOAD_FOLDER='static/',
+    UPLOAD_FOLDER='/fsikasse/static/',
     ALLOWED_EXTENSIONS=set(['png', 'jpg', 'jpeg', 'gif']),
     PROFILE_IMAGE_SIZE=(150, 200),
     STORAGE_ACCOUNT=(4, 'Lager/Kühlschrank'),
@@ -539,5 +539,5 @@ def show_statistics():
                            transactions=transactions)
 
 if __name__ == '__main__':
-    app.debug = True
-    app.run()
+    app.debug = False
+    app.run(host='0.0.0.0')
