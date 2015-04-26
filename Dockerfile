@@ -1,19 +1,14 @@
-FROM debian:jessie
+FROM python:wheezy
 MAINTAINER "Friedrich Zahn <toothstone@wh2.tu-dresden.de>"
 
 EXPOSE 5000
 
-RUN echo "deb http://ramses.wh2.tu-dresden.de/debian/ jessie main contrib non-free" > /etc/apt/sources.list
-RUN apt-get update && apt-get upgrade -y
-RUN apt-get install -y git python python-dev python-pip libjpeg-dev libpng12-dev 
-RUN pip install Pillow
-RUN mkdir /flask
-WORKDIR /flask
-RUN git clone http://github.com/mitsuhiko/flask.git .
-RUN python setup.py develop
+RUN echo "deb http://ramses.wh2.tu-dresden.de/debian/ wheezy main contrib non-free" > /etc/apt/sources.list
+RUN apt-get update && apt-get upgrade -y && apt-get install -y git libjpeg-dev libpng12-dev sqlite3 
+RUN pip install Pillow Flask
 RUN mkdir /fsikasse
 WORKDIR /fsikasse
 ADD / /fsikasse/
-RUN ls
+RUN rm kasse.db && sqlite3 kasse.db < schema.sql
 CMD python /fsikasse/run.py
 
