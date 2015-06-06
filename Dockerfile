@@ -9,7 +9,7 @@ RUN pip install Pillow Flask uwsgi
 RUN mkdir /fsikasse
 WORKDIR /fsikasse
 ADD / /fsikasse/
-RUN rm kasse.db && sqlite3 kasse.db < schema.sql
+RUN sqlite3 kasse.db < schema.sql
 RUN rm /etc/nginx/sites-enabled/*
 ADD /nginx.conf /etc/nginx/sites-enabled/mateduct.conf
 CMD service nginx start && uwsgi --ini /fsikasse/uwsgi.ini 
